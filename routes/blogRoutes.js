@@ -13,7 +13,7 @@ router.get("/blogs/search", blogController.searchBlogs);
 //   auth,
 //   blogController.filterAndSortBlogs
 // );
-router.get("/blogs/filter", auth, blogController.filterAndSortBlogs);
+router.get("/blogs/", auth, blogController.filterAndSortBlogs);
 router.post("/blogs", auth, blogController.createBlog);
 router.put("/blogs/:id", auth, blogController.updateBlog);
 router.patch("/blogs/:id/like", auth, blogController.likeBlog);
