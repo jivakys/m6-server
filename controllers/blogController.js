@@ -132,12 +132,21 @@ exports.searchBlogs = async (req, res) => {
 
 exports.filterAndSortBlogs = async (req, res) => {
   try {
-    const category = req.params.category;
-    const order = req.params.order;
-
-    const filteredAndSortedBlogs = await Blog.find({ category }).sort({
-      date: order,
-    });
+    const category = req.query.category;
+    const order = req.query.order;
+    const query = {};
+    if (category) {
+      query.category = category;
+    }
+    const sortOptions = {};
+    if (order) {
+      if (order === "1") {
+        sortOptions.date = 1;
+      } else if (order === "-1") {
+        sortOptions.date = -1;
+      }
+    }
+    const filteredAndSortedBlogs = await Blog.find(query).sort(sortOptions);
     res.json(filteredAndSortedBlogs);
   } catch (error) {
     res.status(500).json({ error: "Error filtering and sorting blogs" });

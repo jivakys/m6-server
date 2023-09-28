@@ -6,7 +6,7 @@ const auth = require("../utils/auth");
 // router.use(auth)
 router.get("/", blogController.welcome);
 router.get("/blogs", blogController.getAllBlogs);
-router.get("/blogs/:id", auth, blogController.oneBlog);
+router.get("/blogs/:id", blogController.oneBlog);
 router.get("/blogs/search", blogController.searchBlogs);
 router.get("/blogs/filter", auth, blogController.filterAndSortBlogs);
 router.post("/blogs", auth, blogController.createBlog);
