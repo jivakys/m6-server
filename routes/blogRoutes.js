@@ -8,12 +8,11 @@ router.get("/", blogController.welcome);
 router.get("/blogs", blogController.getAllBlogs);
 router.get("/blogs/:id", auth, blogController.oneBlog);
 router.get("/blogs/search", blogController.searchBlogs);
-// router.get(
-//   "/blogs/filter/:category/sort/:order",
-//   auth,
-//   blogController.filterAndSortBlogs
-// );
-router.get("/blogs/", auth, blogController.filterAndSortBlogs);
+router.get(
+  "/blogs/filter/:category/sort/:order",
+  auth,
+  blogController.filterAndSortBlogs
+);
 router.post("/blogs", auth, blogController.createBlog);
 router.put("/blogs/:id", auth, blogController.updateBlog);
 router.patch("/blogs/:id/like", auth, blogController.likeBlog);

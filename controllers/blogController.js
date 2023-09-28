@@ -131,38 +131,15 @@ exports.searchBlogs = async (req, res) => {
 };
 
 exports.filterAndSortBlogs = async (req, res) => {
-  // try {
-  //   const category = req.params.category;
-  //   const order = req.params.order;
-
-  //   const filteredAndSortedBlogs = await Blog.find({ category }).sort({
-  //     date: order,
-  //   });
-  //   res.json(filteredAndSortedBlogs);
-  // } catch (error) {
-  //   res.status(500).json({ error: "Error filtering and sorting blogs" });
-  // }
   try {
-    let { order, filter, search } = req.query;
-    let query = {};
-    let sort = {};
-    if (order) {
-      sort = { createdAt: order };
-    }
-    if (filter) {
-      query.category = filter;
-    }
-    if (search) {
-      query.title = { $regex: search, $options: "i" };
-    }
-    console.log(query);
-    const blogs = await BlogModel.find(query).sort(sort);
-    return res.status(200).json({ status: true, blogs });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: false,
-      message: "something went wrong try again later ",
+    const category = req.params.category;
+    const order = req.params.order;
+
+    const filteredAndSortedBlogs = await Blog.find({ category }).sort({
+      date: order,
     });
+    res.json(filteredAndSortedBlogs);
+  } catch (error) {
+    res.status(500).json({ error: "Error filtering and sorting blogs" });
   }
 };
