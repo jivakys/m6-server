@@ -75,8 +75,11 @@ exports.likeBlog = async (req, res) => {
       { new: true }
     );
     if (!updatedBlog) {
-      return res.status(404).json({ error: "Blog not found for like update" });}
-    res.status(201).json({ message: "Blog likes updated successfully", updatedBlog });
+      return res.status(404).json({ error: "Blog not found for like update" });
+    }
+    res
+      .status(201)
+      .json({ message: "Blog likes updated successfully", updatedBlog });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error" });
@@ -106,7 +109,9 @@ exports.commentOnBlog = async (req, res) => {
         .status(404)
         .json({ error: "Blog not found for comment update" });
     }
-    res.status(201).json({ message: "Blog comment updated successfully", updatedBlog });
+    res
+      .status(201)
+      .json({ message: "Blog comment updated successfully", updatedBlog });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error" });
@@ -126,15 +131,38 @@ exports.searchBlogs = async (req, res) => {
 };
 
 exports.filterAndSortBlogs = async (req, res) => {
-  try {
-    const category = req.params.category;
-    const order = req.params.order;
+  // try {
+  //   const category = req.params.category;
+  //   const order = req.params.order;
 
-    const filteredAndSortedBlogs = await Blog.find({ category }).sort({
-      date: order,
-    });
-    res.json(filteredAndSortedBlogs);
+  //   const filteredAndSortedBlogs = await Blog.find({ category }).sort({
+  //     date: order,
+  //   });
+  //   res.json(filteredAndSortedBlogs);
+  // } catch (error) {
+  //   res.status(500).json({ error: "Error filtering and sorting blogs" });
+  // }
+  try {
+    let { order, filter, search } = req.query;
+    let query = {};
+    let sort = {};
+    if (order) {
+      sort = { createdAt: order };
+    }
+    if (filter) {
+      query.category = filter;
+    }
+    if (search) {
+      query.title = { $regex: search, $options: "i" };
+    }
+    console.log(query);
+    const blogs = await BlogModel.find(query).sort(sort);
+    return res.status(200).json({ status: true, blogs });
   } catch (error) {
-    res.status(500).json({ error: "Error filtering and sorting blogs" });
+    console.log(error);
+    return res.status(500).json({
+      status: false,
+      message: "something went wrong try again later ",
+    });
   }
 };
