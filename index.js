@@ -4,11 +4,20 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const { connection } = require("./configs/db");
+const { createProxyMiddleware } = require("http-proxy-middleware");
+
 require("dotenv").config();
 const app = express();
 
 app.use(cors());
-//
+app.use(
+  "/api",
+  createProxyMiddleware({
+    target: "https://eager-sunbonnet-bass.cyclic.cloud",
+    changeOrigin: true,
+  })
+);
+app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.json());
 
